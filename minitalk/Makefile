@@ -6,7 +6,7 @@
 #    By: nifromon <nifromon@student.42perpignan.    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/01/08 13:36:58 by nifromon          #+#    #+#              #
-#    Updated: 2025/01/08 14:38:43 by nifromon         ###   ########.fr        #
+#    Updated: 2025/01/08 15:17:00 by nifromon         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -36,7 +36,9 @@ RM =				rm -rf
 
 # Sources and objects
 SERVER_SRC =		\
-					$(SERVER_DIR)/receiver.c $(SERVER_DIR)/main.c
+					$(SERVER_DIR)/receiver.c $(SERVER_DIR)/main.c \
+					$(SERVER_DIR)/initializer.c $(SERVER_DIR)/server.c
+
 
 OBJ_SERVER_SRC =	$(SERVER_SRC:$(SERVER_DIR)/%.c=$(OBJ_SERVER_DIR)/%.o)
 
