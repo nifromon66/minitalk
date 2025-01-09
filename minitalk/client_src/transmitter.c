@@ -6,7 +6,7 @@
 /*   By: nifromon <nifromon@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/08 14:36:21 by nifromon          #+#    #+#             */
-/*   Updated: 2025/01/08 14:36:30 by nifromon         ###   ########.fr       */
+/*   Updated: 2025/01/09 11:21:33 by nifromon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,19 +15,9 @@
 // Function to send a message to the server
 void	send_message(int server_pid, char *str)
 {
-	int	i;
-
-	i = 0;
 	send_len(server_pid, ft_strlen(str));
 	send_str(server_pid, str);
-	while (i < 8)
-	{
-		kill(server_pid, SIGUSR1);
-		i++;
-		pause();
-		ft_printf("boucle du back zero\n");
-	}
-	ft_printf("j ai fini\n");
+	send_char(server_pid, '\0');
 }
 
 // Function to send a character to the server using only 0 and 1

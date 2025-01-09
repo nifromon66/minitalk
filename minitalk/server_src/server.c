@@ -6,7 +6,7 @@
 /*   By: nifromon <nifromon@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/08 14:52:22 by nifromon          #+#    #+#             */
-/*   Updated: 2025/01/08 15:06:02 by nifromon         ###   ########.fr       */
+/*   Updated: 2025/01/09 11:20:06 by nifromon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,6 @@ int	is_number(char *str)
 // Function to confirm the reception of each bit to the client
 void	confirm_bit_reception(void)
 {
-	usleep(100);
+	usleep(250);
 	kill(g_container->pid, SIGUSR2);
 }
