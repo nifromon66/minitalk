@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   initializer.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: chdonnat <chdonnat@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nifromon <nifromon@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/08 14:56:41 by nifromon          #+#    #+#             */
-/*   Updated: 2025/01/09 16:23:49 by chdonnat         ###   ########.fr       */
+/*   Updated: 2025/01/09 18:15:48 by nifromon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/server.h"
+#include "../headers/server.h"
 
 // Function to initialize the g_container variables
 void	initialize_container(void)
@@ -88,7 +88,7 @@ void	initialize_msg(void)
 void	initialize_waiting_signal(void)
 {
 	int	temp;
-	
+
 	ft_printf("Starting to receive waiting message...\n");
 	temp = g_container->next_pid;
 	g_container->pid = temp;

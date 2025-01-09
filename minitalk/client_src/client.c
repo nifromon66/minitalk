@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   client.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: chdonnat <chdonnat@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nifromon <nifromon@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/08 14:35:16 by nifromon          #+#    #+#             */
-/*   Updated: 2025/01/09 16:37:26 by chdonnat         ###   ########.fr       */
+/*   Updated: 2025/01/09 18:15:48 by nifromon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/client.h"
+#include "../headers/client.h"
 
 // Function to display an error message and exit the program
 void	error(char *str)

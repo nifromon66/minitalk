@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   server.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: chdonnat <chdonnat@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nifromon <nifromon@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/08 13:19:30 by nifromon          #+#    #+#             */
-/*   Updated: 2025/01/09 15:42:26 by chdonnat         ###   ########.fr       */
+/*   Updated: 2025/01/09 18:23:22 by nifromon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,11 +20,6 @@
 # include "../libft/headers/libft_H/libft.h"
 
 // Structures
-// typedef struct	s_sign
-// {
-// 	int			signal;
-// 	siginfo_t	*info;
-// }				t_sign;
 typedef struct s_msg
 {
 	char	*msg;

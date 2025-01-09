@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   transmitter.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: chdonnat <chdonnat@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nifromon <nifromon@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/08 14:36:21 by nifromon          #+#    #+#             */
-/*   Updated: 2025/01/09 16:32:48 by chdonnat         ###   ########.fr       */
+/*   Updated: 2025/01/09 18:15:48 by nifromon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/client.h"
+#include "../headers/client.h"
 
 // Function to send a message to the server
 void	send_message(int server_pid, char *str)

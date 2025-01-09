@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   receiver.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: chdonnat <chdonnat@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nifromon <nifromon@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/08 14:37:47 by nifromon          #+#    #+#             */
-/*   Updated: 2025/01/09 16:43:23 by chdonnat         ###   ########.fr       */
+/*   Updated: 2025/01/09 18:15:48 by nifromon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/server.h"
+#include "../headers/server.h"
 
 // Function to receive the first ping and start the reception
 void	receive_ping(int signum, siginfo_t *info, void *context)

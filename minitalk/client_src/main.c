@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: chdonnat <chdonnat@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nifromon <nifromon@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/08 14:35:47 by nifromon          #+#    #+#             */
-/*   Updated: 2025/01/09 16:48:36 by chdonnat         ###   ########.fr       */
+/*   Updated: 2025/01/09 18:15:48 by nifromon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/client.h"
+#include "../headers/client.h"
 
 t_client	*g_client;
 
@@ -20,7 +20,7 @@ int	main(int ac, char **av)
 
 	if (ac != 3)
 		error("2 arguments are required (one PID and a string).");
-	g_client = (t_client *) malloc(sizeof(t_client)); 
+	g_client = (t_client *) malloc(sizeof(t_client));
 	if (!g_client)
 		error("memory allocation failed");
 	signal(SIGUSR2, confirm);
