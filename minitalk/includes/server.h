@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   server.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nifromon <nifromon@student.42perpignan.    +#+  +:+       +#+        */
+/*   By: chdonnat <chdonnat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/08 13:19:30 by nifromon          #+#    #+#             */
-/*   Updated: 2025/01/08 15:01:50 by nifromon         ###   ########.fr       */
+/*   Updated: 2025/01/09 15:42:26 by chdonnat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,12 +20,20 @@
 # include "../libft/headers/libft_H/libft.h"
 
 // Structures
+// typedef struct	s_sign
+// {
+// 	int			signal;
+// 	siginfo_t	*info;
+// }				t_sign;
 typedef struct s_msg
 {
 	char	*msg;
 	char	*len_str;
 	int		pid;
 	int		len;
+	int		chrono_on;
+	int		time;
+	int		next_pid;
 }			t_msg;
 
 // Global variable
@@ -44,5 +52,11 @@ void	receive_msg(int signum, siginfo_t *info, void *context);
 void	store_msg(char c);
 void	end_reception(void);
 int		is_number(char *str);
+void	confirm_message_reception(void);
+void	initialize_waiting_signal(void);
+void	put_to_wait(int pid);
+void	initialize_ping(void);
+void	receive_ping(int signum, siginfo_t *info, void *context);
+
 
 #endif

@@ -3,19 +3,21 @@
 /*                                                        :::      ::::::::   */
 /*   client.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nifromon <nifromon@student.42perpignan.    +#+  +:+       +#+        */
+/*   By: chdonnat <chdonnat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/08 14:35:16 by nifromon          #+#    #+#             */
-/*   Updated: 2025/01/08 14:35:28 by nifromon         ###   ########.fr       */
+/*   Updated: 2025/01/09 16:37:26 by chdonnat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../headers/client.h"
+#include "../includes/client.h"
 
 // Function to display an error message and exit the program
 void	error(char *str)
 {
 	ft_printf("\x1b[31mERROR:\x1b[0m %s\n", str);
+	if (g_client)
+		free(g_client);
 	exit(1);
 }
 
@@ -50,15 +52,26 @@ int	check_pid(char *str)
 		error("Invalid PID, only positive numbers are allowed.");
 	if (kill(pid, 0) == -1)
 		error("Invalid PID, the process does not exist.");
-	ft_printf("%d\n", pid);
 	return (pid);
 }
 
-// Function confirm that the server has answered
-void	confirmation(int signum)
+// Function to confirm that the server has received a bit (SIGUSR2)
+// or the entire message (SIGUSR1)
+void	confirm(int signum)
+{
+	g_client->confirmed = 1;
+	if (signum == SIGUSR1)
+	{
+		ft_printf("\x1b[32mMessage sent. \x1b[0m");
+		ft_printf("\x1b[32mServer has confirmed by sending a signal.\x1b[0m\n");
+		exit(0);
+	}
+}
+
+// Function to receive the signal to stop the waiting
+void	stop_waiting(int signum)
 {
 	(void) signum;
-	ft_printf("\x1b[32mMessage sent. \x1b[0m");
-	ft_printf("\x1b[32mServer has confirmed by sending a signal.\x1b[0m\n");
-	exit(0);
+	g_client->waiting = 0;
+	signal(SIGUSR1, confirm);
 }

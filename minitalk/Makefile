@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: nifromon <nifromon@student.42perpignan.    +#+  +:+       +#+         #
+#    By: chdonnat <chdonnat@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/01/08 13:36:58 by nifromon          #+#    #+#              #
-#    Updated: 2025/01/08 15:17:00 by nifromon         ###   ########.fr        #
+#    Updated: 2025/01/09 09:36:52 by chdonnat         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -22,7 +22,7 @@ INCLUDES =			-I $(HEADER_DIR)/
 # Directories
 SERVER_DIR =		server_src
 CLIENT_DIR =		client_src
-HEADER_DIR =		headers
+HEADER_DIR =		includes
 
 OBJ_DIR =			obj
 OBJ_SERVER_DIR =	$(OBJ_DIR)/server_obj
