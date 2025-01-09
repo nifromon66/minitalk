@@ -6,7 +6,7 @@
 /*   By: nifromon <nifromon@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/08 14:56:41 by nifromon          #+#    #+#             */
-/*   Updated: 2025/01/09 18:15:48 by nifromon         ###   ########.fr       */
+/*   Updated: 2025/01/09 19:16:58 by nifromon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,4 +97,3 @@ void	initialize_waiting_signal(void)
 	usleep(200);
 	kill(g_container->pid, SIGUSR1);
 }
-
