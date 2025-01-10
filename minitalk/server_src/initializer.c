@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   initializer.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nifromon <nifromon@student.42perpignan.    +#+  +:+       +#+        */
+/*   By: nifromon <nifromon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/08 14:56:41 by nifromon          #+#    #+#             */
-/*   Updated: 2025/01/09 19:16:58 by nifromon         ###   ########.fr       */
+/*   Updated: 2025/01/10 00:36:55 by nifromon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,11 @@ void	initialize_container(void)
 		g_container->chrono_on = 0;
 		g_container->time = 0;
 		ft_bzero(g_container->len_str, 11);
-		if (g_container->next_pid != -100)
+		if (g_container->current_client != g_container->waiting_index)
+			g_container->waiting_on = 1;
+		else
+			g_container->waiting_on = 0;
+		if (g_container->waiting_on == 1)
 			initialize_waiting_signal();
 	}
 }
@@ -87,13 +91,10 @@ void	initialize_msg(void)
 
 void	initialize_waiting_signal(void)
 {
-	int	temp;
-
 	ft_printf("Starting to receive waiting message...\n");
-	temp = g_container->next_pid;
-	g_container->pid = temp;
-	g_container->next_pid = -100;
 	initialize_len();
-	usleep(200);
-	kill(g_container->pid, SIGUSR1);
+	usleep(500);
+	kill(g_container->waiting_line[g_container->current_client], SIGUSR1);
+	g_container->pid = g_container->waiting_line[g_container->current_client];
+	g_container->current_client++;
 }

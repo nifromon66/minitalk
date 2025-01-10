@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   transmitter.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nifromon <nifromon@student.42perpignan.    +#+  +:+       +#+        */
+/*   By: nifromon <nifromon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/08 14:36:21 by nifromon          #+#    #+#             */
-/*   Updated: 2025/01/09 18:15:48 by nifromon         ###   ########.fr       */
+/*   Updated: 2025/01/10 00:57:59 by nifromon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@ void	send_message(int server_pid, char *str)
 	g_client->confirmed = 0;
 	g_client->waiting = 1;
 	kill(server_pid, SIGUSR1);
+	usleep(300);
 	while(g_client->waiting)
 		;
 	send_len(server_pid, ft_strlen(str));
@@ -48,7 +49,7 @@ void	send_char(int server_pid, char c)
 		{
 			usleep(100);
 			timer++;
-			if (timer >= 1000)
+			if (timer >= 100000)
 				error("Server did not confirm. Communication seems to have failed.");
 		}
 	}

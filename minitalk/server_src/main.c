@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nifromon <nifromon@student.42perpignan.    +#+  +:+       +#+        */
+/*   By: nifromon <nifromon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/08 14:37:15 by nifromon          #+#    #+#             */
-/*   Updated: 2025/01/09 18:15:48 by nifromon         ###   ########.fr       */
+/*   Updated: 2025/01/10 00:58:56 by nifromon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,10 @@ int	main(void)
 	g_container->len_str = (char *) malloc(sizeof(char) * 11);
 	if (!g_container->len_str)
 		error("memory allocation failed");
-	g_container->next_pid = -100;
+	g_container->current_client = 0;
+	g_container->waiting_index = 0;
+	g_container->waiting_on = 0;
+	g_container->waiting_line = NULL;
 	ft_printf("SERVER PID: %d\n", getpid());
 	ft_printf("Press CTRL + C if you want to close the server.\n");
 	initialize_ping();
@@ -34,7 +37,7 @@ int	main(void)
 		{
 			usleep(100);
 			g_container->time++;
-			if (g_container->time >= 10000)
+			if (g_container->time >= 100000)
 				error("timeout");
 		}
 	}

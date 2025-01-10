@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   server.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nifromon <nifromon@student.42perpignan.    +#+  +:+       +#+        */
+/*   By: nifromon <nifromon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/08 13:19:30 by nifromon          #+#    #+#             */
-/*   Updated: 2025/01/09 18:23:22 by nifromon         ###   ########.fr       */
+/*   Updated: 2025/01/09 22:17:30 by nifromon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,10 @@ typedef struct s_msg
 	int		len;
 	int		chrono_on;
 	int		time;
-	int		next_pid;
+	int		current_client;
+	int		waiting_on;
+	int		waiting_index;
+	int		*waiting_line;
 }			t_msg;
 
 // Global variable
@@ -52,6 +55,7 @@ void	initialize_waiting_signal(void);
 void	put_to_wait(int pid);
 void	initialize_ping(void);
 void	receive_ping(int signum, siginfo_t *info, void *context);
+int 	my_realloc(void **ptr, int old_size, int new_size);
 
 
 #endif

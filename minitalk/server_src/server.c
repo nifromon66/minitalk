@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   server.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nifromon <nifromon@student.42perpignan.    +#+  +:+       +#+        */
+/*   By: nifromon <nifromon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/08 14:52:22 by nifromon          #+#    #+#             */
-/*   Updated: 2025/01/09 18:15:48 by nifromon         ###   ########.fr       */
+/*   Updated: 2025/01/10 00:37:59 by nifromon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,12 +16,21 @@
 void	close_program(int signum)
 {
 	(void) signum;
+	ft_printf("close_programm\n");
 	if (g_container)
 	{
 		if (g_container->len_str)
 			free(g_container->len_str);
 		if (g_container->msg)
 			free(g_container->msg);
+		if (g_container->waiting_line)
+		{
+				if (my_realloc((void **)&g_container->waiting_line, (g_container->waiting_index + 1) * sizeof(int), 0) == -1)
+				{
+					error("memory allocation failed");
+					free(g_container->waiting_line);
+				}
+		}
 		free(g_container);
 	}
 	exit (0);
@@ -38,6 +47,11 @@ void	error(char *str)
 		{
 			if (g_container->len_str)
 				free(g_container->len_str);
+			if (my_realloc((void **)&g_container->waiting_line, g_container->waiting_index * sizeof(int), 0) == -1)
+			{
+					error("memory allocation failed");
+					free(g_container->waiting_line);
+			}
 			free(g_container);
 		}
 		exit(0);
@@ -68,13 +82,13 @@ int	is_number(char *str)
 // Function to confirm the reception of each bit to the client
 void	confirm_bit_reception(void)
 {
-	usleep(300);
+	usleep(500);
 	kill(g_container->pid, SIGUSR2);
 }
 
 // Function to confirm the reception of the entire message
 void	confirm_message_reception(void)
 {
-	usleep(300);
+	usleep(500);
 	kill(g_container->pid, SIGUSR1);
 }

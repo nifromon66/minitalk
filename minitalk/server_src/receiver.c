@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   receiver.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nifromon <nifromon@student.42perpignan.    +#+  +:+       +#+        */
+/*   By: nifromon <nifromon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/08 14:37:47 by nifromon          #+#    #+#             */
-/*   Updated: 2025/01/09 18:15:48 by nifromon         ###   ########.fr       */
+/*   Updated: 2025/01/10 00:59:49 by nifromon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,8 @@ void	receive_ping(int signum, siginfo_t *info, void *context)
 	if (g_container->pid == -100)
 	{
 		g_container->pid = info->si_pid;
+		usleep(500);
 		kill(info->si_pid, SIGUSR1);
-		usleep(200);
 	}
 }
 
@@ -46,8 +46,8 @@ void	check_msg_len(int signum, siginfo_t *info, void *context)
 			i = 0;
 			c = 0;
 		}
-		g_container->time = 0;
 		confirm_bit_reception();
+		g_container->time = 0;
 	}
 	else
 		put_to_wait(info->si_pid);
@@ -132,7 +132,11 @@ void	end_reception(void)
 	confirm_message_reception();
 	ft_printf("Message received from client %d:\n", g_container->pid);
 	ft_printf("\033[0;32m%s\033[0m\n", g_container->msg);
-	if (g_container->next_pid == -100)
+	if (g_container->current_client != g_container->waiting_index)
+		g_container->waiting_on = 1;
+	else
+		g_container->waiting_on = 0;
+	if (g_container->waiting_on == 0)
 		initialize_ping();
 	else
 		initialize_len();
@@ -142,5 +146,51 @@ void	end_reception(void)
 // Function to put a message on wait while the server is already receiving a message
 void	put_to_wait(int pid)
 {
-	g_container->next_pid = pid;
+	int	old_index;
+	int	new_index;
+
+	old_index = 0;
+	new_index = 0;
+	old_index = g_container->waiting_index + 1;
+	new_index = old_index + 1;
+	if (!g_container->waiting_line)
+	{
+		g_container->waiting_line = (int *)malloc(sizeof(int) * 2);
+		if (!g_container->waiting_line)
+			error("memory allocation failed");
+		g_container->waiting_line[g_container->waiting_index] = pid;
+		g_container->waiting_line[g_container->waiting_index + 1] = -100;
+	}
+	else if (g_container->waiting_line)
+	{
+		if (my_realloc((void **)&g_container->waiting_line, old_index * sizeof(int), new_index * sizeof(int)) == -1)
+		{
+			error("memory allocation failed");
+			free(g_container->waiting_line);
+		}
+		g_container->waiting_line[g_container->waiting_index] = pid;
+		g_container->waiting_line[g_container->waiting_index + 1] = -100;
+	}
+	g_container->waiting_index++;
 }
+
+int my_realloc(void **ptr, int old_size, int new_size) 
+{
+	int 	min_size;
+	void	*new_ptr;
+
+    if (!ptr)
+		return (-1);
+	min_size = 0;
+    if (new_size == 0) 
+        return (free(*ptr), *ptr = NULL, 0);
+    new_ptr = malloc(new_size);
+    if (!new_ptr)
+        return (-1);
+    min_size = (old_size < new_size) ? old_size : new_size;
+    ft_memcpy(new_ptr, *ptr, min_size);
+    free(*ptr);
+    *ptr = new_ptr;
+    return (0);
+}
+
