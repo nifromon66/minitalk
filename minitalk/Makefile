@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: nifromon <nifromon@student.42perpignan.    +#+  +:+       +#+         #
+#    By: nifromon <nifromon@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/01/08 13:36:58 by nifromon          #+#    #+#              #
-#    Updated: 2025/01/09 18:15:48 by nifromon         ###   ########.fr        #
+#    Updated: 2025/01/12 20:01:51 by nifromon         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -44,7 +44,7 @@ OBJ_SERVER_SRC =	$(SERVER_SRC:$(SERVER_DIR)/%.c=$(OBJ_SERVER_DIR)/%.o)
 
 CLIENT_SRC =		\
 					$(CLIENT_DIR)/client.c $(CLIENT_DIR)/main.c \
-					$(CLIENT_DIR)/transmitter.c
+					$(CLIENT_DIR)/transmitter.c $(CLIENT_DIR)/initializer.c
 
 OBJ_CLIENT_SRC =	$(CLIENT_SRC:$(CLIENT_DIR)/%.c=$(OBJ_CLIENT_DIR)/%.o)
 

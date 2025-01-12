@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   client.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nifromon <nifromon@student.42perpignan.    +#+  +:+       +#+        */
+/*   By: nifromon <nifromon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/08 14:35:16 by nifromon          #+#    #+#             */
-/*   Updated: 2025/01/09 18:15:48 by nifromon         ###   ########.fr       */
+/*   Updated: 2025/01/12 21:10:35 by nifromon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,21 +57,47 @@ int	check_pid(char *str)
 
 // Function to confirm that the server has received a bit (SIGUSR2)
 // or the entire message (SIGUSR1)
-void	confirm(int signum)
+void	bit_confirmation(int signum, siginfo_t *info, void *context)
 {
-	g_client->confirmed = 1;
-	if (signum == SIGUSR1)
+	(void) context;
+	if (info->si_pid == g_client->server_pid && signum == SIGUSR2)
+		g_client->bit_confirmed = 1;
+}
+
+void	msg_confirmation(int signum, siginfo_t *info, void *context)
+{
+	(void) context;
+	if (info->si_pid == g_client->server_pid)
 	{
-		ft_printf("\x1b[32mMessage sent. \x1b[0m");
-		ft_printf("\x1b[32mServer has confirmed by sending a signal.\x1b[0m\n");
-		exit(0);
+		g_client->bit_confirmed = 1;
+		if (signum == SIGUSR1)
+		{
+			ft_printf("\x1b[32mMessage sent. \x1b[0m");
+			ft_printf("\x1b[32mServer has bit_confirmed by sending a signal.\x1b[0m\n");
+			exit(0);
+		}
 	}
 }
 
 // Function to receive the signal to stop the waiting
-void	stop_waiting(int signum)
+void	waiting(int signum, siginfo_t *info, void *context)
 {
-	(void) signum;
-	g_client->waiting = 0;
-	signal(SIGUSR1, confirm);
+	(void) context;
+	if (info->si_pid == g_client->server_pid)
+	{
+		if (signum == SIGUSR1)
+		{
+			g_client->continue_waiting = 0;
+			g_client->waiting_timer = 0;
+			g_client->timer = 0;
+		}
+		else if (signum == SIGUSR2)
+		{
+			g_client->continue_waiting = 0;
+			g_client->waiting_timer = 0;
+			g_client->stop_waiting = 0;
+			g_client->timer = 0;
+			initialize_bit_confirmation();
+		}
+	}
 }

@@ -6,7 +6,7 @@
 /*   By: nifromon <nifromon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/08 14:37:47 by nifromon          #+#    #+#             */
-/*   Updated: 2025/01/10 00:59:49 by nifromon         ###   ########.fr       */
+/*   Updated: 2025/01/12 21:27:28 by nifromon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,11 +18,11 @@ void	receive_ping(int signum, siginfo_t *info, void *context)
 	(void) signum;
 	(void) context;
 	initialize_len();
-	if (g_container->pid == -100)
+	if (g_server->pid == -100)
 	{
-		g_container->pid = info->si_pid;
+		g_server->pid = info->si_pid;
 		usleep(500);
-		kill(info->si_pid, SIGUSR1);
+		kill(info->si_pid, SIGUSR2);
 	}
 }
 
@@ -33,9 +33,9 @@ void	check_msg_len(int signum, siginfo_t *info, void *context)
 	static int	i = 0;
 
 	(void) context;
-	g_container->chrono_on = 1;
-	g_container->time = 0;
-	if (info->si_pid == g_container->pid)
+	g_server->chrono_on = 1;
+	g_server->time = 0;
+	if (info->si_pid == g_server->pid)
 	{
 		if (signum == SIGUSR2)
 			c |= 1 << i;
@@ -47,7 +47,7 @@ void	check_msg_len(int signum, siginfo_t *info, void *context)
 			c = 0;
 		}
 		confirm_bit_reception();
-		g_container->time = 0;
+		g_server->time = 0;
 	}
 	else
 		put_to_wait(info->si_pid);
@@ -59,21 +59,21 @@ void	store_msg_len(char c)
 {
 	static int	i = 0;
 
-	g_container->time = 0;
-	g_container->len_str[i] = c;
+	g_server->time = 0;
+	g_server->len_str[i] = c;
 	i++;
 	if (i == 10)
 	{
-		if (!is_number(g_container->len_str))
+		if (!is_number(g_server->len_str))
 			error("incorrect message len");
 		else
 		{
-			g_container->len = ft_atoi(g_container->len_str);
+			g_server->len = ft_atoi(g_server->len_str);
 			initialize_msg();
 		}
 		i = 0;
 	}
-	g_container->time = 0;
+	g_server->time = 0;
 }
 
 // Function to receive the msg
@@ -83,8 +83,8 @@ void	receive_msg(int signum, siginfo_t *info, void *context)
 	static int	i = 0;
 
 	(void) context;
-	g_container->time = 0;
-	if (info->si_pid == g_container->pid)
+	g_server->time = 0;
+	if (info->si_pid == g_server->pid)
 	{
 		if (signum == SIGUSR2)
 			c |= 1 << i;
@@ -96,7 +96,7 @@ void	receive_msg(int signum, siginfo_t *info, void *context)
 			c = 0;
 		}
 		confirm_bit_reception();
-		g_container->time = 0;
+		g_server->time = 0;
 	}
 	else
 		put_to_wait(info->si_pid);
@@ -107,10 +107,10 @@ void	store_msg(char c)
 {
 	static int	i = 0;
 
-	g_container->time = 0;
-	g_container->msg[i] = c;
+	g_server->time = 0;
+	g_server->msg[i] = c;
 	i++;
-	if (i == g_container->len + 1)
+	if (i == g_server->len + 1)
 	{
 		i = 0;
 		if (c != '\0')
@@ -121,25 +121,17 @@ void	store_msg(char c)
 			end_reception();
 		}
 	}
-	g_container->time = 0;
+	g_server->time = 0;
 }
 
 // Function to print the msg and reinitialize the receiver
 void	end_reception(void)
 {
-	g_container->chrono_on = 0;
-	g_container->time = 0;
+	g_server->chrono_on = 0;
+	g_server->time = 0;
 	confirm_message_reception();
-	ft_printf("Message received from client %d:\n", g_container->pid);
-	ft_printf("\033[0;32m%s\033[0m\n", g_container->msg);
-	if (g_container->current_client != g_container->waiting_index)
-		g_container->waiting_on = 1;
-	else
-		g_container->waiting_on = 0;
-	if (g_container->waiting_on == 0)
-		initialize_ping();
-	else
-		initialize_len();
+	ft_printf("Message received from client %d:\n", g_server->pid);
+	ft_printf("\033[0;32m%s\033[0m\n", g_server->msg);
 	initialize_container();
 }
 
@@ -151,27 +143,28 @@ void	put_to_wait(int pid)
 
 	old_index = 0;
 	new_index = 0;
-	old_index = g_container->waiting_index + 1;
+	old_index = g_server->nbr_clients + 1;
 	new_index = old_index + 1;
-	if (!g_container->waiting_line)
+	ft_printf("Putting to wait client : %d", pid);
+	if (!g_server->waiting_line)
 	{
-		g_container->waiting_line = (int *)malloc(sizeof(int) * 2);
-		if (!g_container->waiting_line)
+		g_server->waiting_line = (int *)malloc(sizeof(int) * 2);
+		if (!g_server->waiting_line)
 			error("memory allocation failed");
-		g_container->waiting_line[g_container->waiting_index] = pid;
-		g_container->waiting_line[g_container->waiting_index + 1] = -100;
+		g_server->waiting_line[g_server->nbr_clients] = pid;
+		g_server->waiting_line[g_server->nbr_clients + 1] = -100;
 	}
-	else if (g_container->waiting_line)
+	else if (g_server->waiting_line)
 	{
-		if (my_realloc((void **)&g_container->waiting_line, old_index * sizeof(int), new_index * sizeof(int)) == -1)
+		if (my_realloc((void **)&g_server->waiting_line, old_index * sizeof(int), new_index * sizeof(int)) == -1)
 		{
 			error("memory allocation failed");
-			free(g_container->waiting_line);
+			free(g_server->waiting_line);
 		}
-		g_container->waiting_line[g_container->waiting_index] = pid;
-		g_container->waiting_line[g_container->waiting_index + 1] = -100;
+		g_server->waiting_line[g_server->nbr_clients] = pid;
+		g_server->waiting_line[g_server->nbr_clients + 1] = -100;
 	}
-	g_container->waiting_index++;
+	g_server->nbr_clients++;
 }
 
 int my_realloc(void **ptr, int old_size, int new_size) 

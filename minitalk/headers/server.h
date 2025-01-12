@@ -6,7 +6,7 @@
 /*   By: nifromon <nifromon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/08 13:19:30 by nifromon          #+#    #+#             */
-/*   Updated: 2025/01/09 22:17:30 by nifromon         ###   ########.fr       */
+/*   Updated: 2025/01/12 19:52:54 by nifromon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,13 +29,12 @@ typedef struct s_msg
 	int		chrono_on;
 	int		time;
 	int		current_client;
-	int		waiting_on;
-	int		waiting_index;
+	int		nbr_clients;
 	int		*waiting_line;
 }			t_msg;
 
 // Global variable
-extern t_msg	*g_container;
+extern t_msg	*g_server;
 
 // Functions
 void	close_program(int signum);

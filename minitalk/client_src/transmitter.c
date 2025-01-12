@@ -6,7 +6,7 @@
 /*   By: nifromon <nifromon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/08 14:36:21 by nifromon          #+#    #+#             */
-/*   Updated: 2025/01/10 00:57:59 by nifromon         ###   ########.fr       */
+/*   Updated: 2025/01/12 21:10:56 by nifromon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,15 +15,27 @@
 // Function to send a message to the server
 void	send_message(int server_pid, char *str)
 {
-	g_client->confirmed = 0;
-	g_client->waiting = 1;
+	g_client->waiting_timer = 0;
+	g_client->bit_confirmed = 0;
+	g_client->stop_waiting = 1;
+	g_client->continue_waiting = 1;
 	kill(server_pid, SIGUSR1);
 	usleep(300);
-	while(g_client->waiting)
-		;
+	while(g_client->stop_waiting == 1)
+	{
+		g_client->continue_waiting = 1;
+		while (g_client->continue_waiting == 1 && g_client->stop_waiting == 1)
+		{
+			usleep(100);
+			g_client->waiting_timer++;
+			if (g_client->waiting_timer >= 15000)
+				error("Server didn't confirm waiting. Communication failed.");
+		}
+	}
 	send_len(server_pid, ft_strlen(str));
 	send_str(server_pid, str);
 	send_char(server_pid, '\0');
+	initialize_msg_confirmation();
 }
 
 // Function to send a character to the server using only 0 and 1
@@ -33,7 +45,6 @@ void	send_message(int server_pid, char *str)
 void	send_char(int server_pid, char c)
 {
 	int	i;
-	int	timer;
 
 	i = 0;
 	while (i < 8)
@@ -43,14 +54,14 @@ void	send_char(int server_pid, char c)
 		else
 			kill(server_pid, SIGUSR1);
 		i++;
-		g_client->confirmed = 0;
-		timer = 0;
-		while (!g_client->confirmed)
+		g_client->bit_confirmed = 0;
+		g_client->bit_timer = 0;
+		while (g_client->bit_confirmed == 0)
 		{
 			usleep(100);
-			timer++;
-			if (timer >= 100000)
-				error("Server did not confirm. Communication seems to have failed.");
+			g_client->bit_timer++;
+			if (g_client->bit_timer >= 10000)
+				error("Server didn't confirm bit. Communication failed.");
 		}
 	}
 }

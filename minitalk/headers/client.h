@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   client.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: chdonnat <chdonnat@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nifromon <nifromon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/08 13:18:15 by nifromon          #+#    #+#             */
-/*   Updated: 2025/01/09 16:34:12 by chdonnat         ###   ########.fr       */
+/*   Updated: 2025/01/12 21:04:41 by nifromon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,21 +22,31 @@
 // Structures
 typedef struct  s_client
 {
-    int confirmed;
-    int waiting;
+    int server_pid;
+    int timer;
+    int bit_timer;
+    int waiting_timer;
+    int bit_confirmed;
+    int continue_waiting;
+    int stop_waiting;
 }       t_client;
 
 // Global variables
 extern t_client *g_client;
 
 // Functions
+
+void	initialize_waiting_confirmation(void);
+void	initialize_bit_confirmation(void);
+void	initialize_msg_confirmation(void);
 // client.c
 // various functions
 void	error(char *str);
 int		is_number(char *str);
 int		check_pid(char *str);
-void    confirm(int ignum);
-void	stop_waiting(int signum);
+void	waiting(int signum, siginfo_t *info, void *context);
+void	bit_confirmation(int signum, siginfo_t *info, void *context);
+void	msg_confirmation(int signum, siginfo_t *info, void *context);
 
 // transmitter.c
 // functions to send messages by using 2 signals
