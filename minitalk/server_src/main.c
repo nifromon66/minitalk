@@ -6,7 +6,7 @@
 /*   By: nifromon <nifromon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/08 14:37:15 by nifromon          #+#    #+#             */
-/*   Updated: 2025/01/12 20:42:13 by nifromon         ###   ########.fr       */
+/*   Updated: 2025/01/13 03:38:33 by nifromon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,8 +26,8 @@ int	main(void)
 	g_server->current_client = 0;
 	g_server->nbr_clients = 0;
 	g_server->waiting_line = NULL;
-	ft_printf("SERVER PID: %d\n", getpid());
-	ft_printf("Press CTRL + C if you want to close the server.\n");
+	ft_printf("\033[0;35mSERVER PID: \033[0m%d\n", getpid());
+	ft_printf("\033[0;35mPress CTRL + C if you want to close the server.\033[0m\n");
 	initialize_container();
 	while (1)
 	{
@@ -35,8 +35,8 @@ int	main(void)
 		{
 			usleep(100);
 			g_server->time++;
-			if (g_server->time >= 100000)
-				error("timeout");
+			if (g_server->time >= 1000000)
+				error("Server timeout");
 		}
 	}
 	return (0);

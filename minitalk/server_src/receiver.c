@@ -6,7 +6,7 @@
 /*   By: nifromon <nifromon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/08 14:37:47 by nifromon          #+#    #+#             */
-/*   Updated: 2025/01/12 21:27:28 by nifromon         ###   ########.fr       */
+/*   Updated: 2025/01/13 04:34:20 by nifromon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,9 +21,11 @@ void	receive_ping(int signum, siginfo_t *info, void *context)
 	if (g_server->pid == -100)
 	{
 		g_server->pid = info->si_pid;
-		usleep(500);
+		usleep(300);
 		kill(info->si_pid, SIGUSR2);
 	}
+	else if (info->si_pid != g_server->pid)
+		put_to_wait(info->si_pid);
 }
 
 // Function to receive the msg_len
@@ -129,9 +131,12 @@ void	end_reception(void)
 {
 	g_server->chrono_on = 0;
 	g_server->time = 0;
-	confirm_message_reception();
-	ft_printf("Message received from client %d:\n", g_server->pid);
+	usleep(300);
+	ft_printf("\033[0;35mMessage received from client [\033[0m%d\033[0;35m] :\033[0m\n", g_server->pid);
+	usleep(50);
 	ft_printf("\033[0;32m%s\033[0m\n", g_server->msg);
+	usleep(25);
+	confirm_message_reception();
 	initialize_container();
 }
 
@@ -145,7 +150,9 @@ void	put_to_wait(int pid)
 	new_index = 0;
 	old_index = g_server->nbr_clients + 1;
 	new_index = old_index + 1;
-	ft_printf("Putting to wait client : %d", pid);
+	usleep(50);
+	kill(pid, SIGUSR1);
+	ft_printf("\033[0;35mPutting to wait client : \033[0m%d\n", pid);
 	if (!g_server->waiting_line)
 	{
 		g_server->waiting_line = (int *)malloc(sizeof(int) * 2);

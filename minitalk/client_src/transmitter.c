@@ -6,7 +6,7 @@
 /*   By: nifromon <nifromon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/08 14:36:21 by nifromon          #+#    #+#             */
-/*   Updated: 2025/01/12 21:10:56 by nifromon         ###   ########.fr       */
+/*   Updated: 2025/01/13 04:32:35 by nifromon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,8 @@ void	send_message(int server_pid, char *str)
 	g_client->bit_confirmed = 0;
 	g_client->stop_waiting = 1;
 	g_client->continue_waiting = 1;
+	usleep(250);
 	kill(server_pid, SIGUSR1);
-	usleep(300);
 	while(g_client->stop_waiting == 1)
 	{
 		g_client->continue_waiting = 1;
@@ -28,10 +28,11 @@ void	send_message(int server_pid, char *str)
 		{
 			usleep(100);
 			g_client->waiting_timer++;
-			if (g_client->waiting_timer >= 15000)
+			if (g_client->waiting_timer >= 30000)
 				error("Server didn't confirm waiting. Communication failed.");
 		}
 	}
+	usleep(250);
 	send_len(server_pid, ft_strlen(str));
 	send_str(server_pid, str);
 	send_char(server_pid, '\0');
@@ -49,6 +50,7 @@ void	send_char(int server_pid, char c)
 	i = 0;
 	while (i < 8)
 	{
+		usleep(5);
 		if (c & 1 << i)
 			kill(server_pid, SIGUSR2);
 		else
@@ -60,7 +62,7 @@ void	send_char(int server_pid, char c)
 		{
 			usleep(100);
 			g_client->bit_timer++;
-			if (g_client->bit_timer >= 10000)
+			if (g_client->bit_timer >= 15000)
 				error("Server didn't confirm bit. Communication failed.");
 		}
 	}

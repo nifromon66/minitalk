@@ -6,7 +6,7 @@
 /*   By: nifromon <nifromon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/08 14:52:22 by nifromon          #+#    #+#             */
-/*   Updated: 2025/01/12 20:43:16 by nifromon         ###   ########.fr       */
+/*   Updated: 2025/01/13 04:34:34 by nifromon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 void	close_program(int signum)
 {
 	(void) signum;
-	ft_printf("close_programm\n");
+	ft_printf("\033[0;35mClosing Server...\033[0m\n");
 	if (g_server)
 	{
 		if (g_server->len_str)
@@ -47,7 +47,7 @@ void	error(char *str)
 		{
 			if (g_server->len_str)
 				free(g_server->len_str);
-			if (my_realloc((void **)&g_server->waiting_line, g_server->nbr_clients * sizeof(int), 0) == -1)
+			if (my_realloc((void **)&g_server->waiting_line, (g_server->nbr_clients + 1) * sizeof(int), 0) == -1)
 			{
 					error("memory allocation failed");
 					free(g_server->waiting_line);
@@ -55,6 +55,17 @@ void	error(char *str)
 			free(g_server);
 		}
 		exit(0);
+	}
+	if (!ft_strncmp(str, "Server timeout", ft_strlen(str)))
+	{
+		if (my_realloc((void **)&g_server->waiting_line, (g_server->nbr_clients + 1)* sizeof(int), 0) == -1)
+		{
+			error("memory allocation failed");
+			free(g_server->waiting_line);
+		}
+		g_server->current_client = 0;
+		g_server->nbr_clients = 0;
+		g_server->waiting_line = NULL;
 	}
 	initialize_container();
 }
@@ -81,15 +92,9 @@ int	is_number(char *str)
 // Function to confirm the reception of each bit to the client
 void	confirm_bit_reception(void)
 {
-	int	i;
-
-	i = 0;
-	usleep(300);
-	while (i != g_server->nbr_clients)
-	{
-		kill(g_server->waiting_line[i], SIGUSR1);
-		i++;
-	}
+	if (g_server->waiting_line)
+		confirm_waiting();
+	usleep(250);
 	kill(g_server->pid, SIGUSR2);
 	
 }
@@ -97,14 +102,21 @@ void	confirm_bit_reception(void)
 // Function to confirm the reception of the entire message
 void	confirm_message_reception(void)
 {
+	if (g_server->waiting_line)
+		confirm_waiting();
+	usleep(250);
+	kill(g_server->pid, SIGUSR1);
+}
+
+void	confirm_waiting(void)
+{
 	int	i;
 
 	i = 0;
-	usleep(300);
 	while (i != g_server->nbr_clients)
 	{
+		usleep(1);
 		kill(g_server->waiting_line[i], SIGUSR1);
 		i++;
 	}
-	kill(g_server->pid, SIGUSR1);
 }

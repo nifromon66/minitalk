@@ -6,7 +6,7 @@
 /*   By: nifromon <nifromon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/08 13:19:30 by nifromon          #+#    #+#             */
-/*   Updated: 2025/01/12 19:52:54 by nifromon         ###   ########.fr       */
+/*   Updated: 2025/01/13 03:04:26 by nifromon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,7 @@ void	close_program(int signum);
 void	initialize_container(void);
 void	error(char *str);
 void	initialize_len(void);
+void	confirm_waiting(void);
 void	check_msg_len(int signum, siginfo_t *info, void *context);
 void	confirm_bit_reception(void);
 void	store_msg_len(char c);
