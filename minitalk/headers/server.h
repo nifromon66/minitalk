@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   server.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nifromon <nifromon@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nifromon <nifromon@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/08 13:19:30 by nifromon          #+#    #+#             */
-/*   Updated: 2025/01/13 03:04:26 by nifromon         ###   ########.fr       */
+/*   Updated: 2025/01/13 15:25:26 by nifromon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,7 @@ void	put_to_wait(int pid);
 void	initialize_ping(void);
 void	receive_ping(int signum, siginfo_t *info, void *context);
 int 	my_realloc(void **ptr, int old_size, int new_size);
+void	delete_client(int client);
 
 
 #endif

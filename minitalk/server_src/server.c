@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   server.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nifromon <nifromon@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nifromon <nifromon@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/08 14:52:22 by nifromon          #+#    #+#             */
-/*   Updated: 2025/01/13 04:34:34 by nifromon         ###   ########.fr       */
+/*   Updated: 2025/01/13 17:23:17 by nifromon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,9 +94,9 @@ void	confirm_bit_reception(void)
 {
 	if (g_server->waiting_line)
 		confirm_waiting();
-	usleep(250);
+	usleep(200);
 	kill(g_server->pid, SIGUSR2);
-	
+
 }
 
 // Function to confirm the reception of the entire message
@@ -104,7 +104,7 @@ void	confirm_message_reception(void)
 {
 	if (g_server->waiting_line)
 		confirm_waiting();
-	usleep(250);
+	usleep(200);
 	kill(g_server->pid, SIGUSR1);
 }
 
@@ -116,7 +116,40 @@ void	confirm_waiting(void)
 	while (i != g_server->nbr_clients)
 	{
 		usleep(1);
-		kill(g_server->waiting_line[i], SIGUSR1);
+		if (kill(g_server->waiting_line[i], SIGUSR1) == -1)
+			delete_client(g_server->waiting_line[i]);
 		i++;
 	}
+}
+
+void	delete_client(int client)
+{
+	int	i;
+	int	delete;
+
+	i = 0;
+	delete = 0;
+	usleep(10);
+	while (i != g_server->nbr_clients)
+	{
+		if (g_server->waiting_line[i] == client)
+		{
+			delete = i;
+			break ;
+		}
+		i++;
+	}
+	while (delete != g_server->nbr_clients)
+	{
+		g_server->waiting_line[delete] = g_server->waiting_line[delete + 1];
+		delete++;
+	}
+	if (my_realloc((void **)&g_server->waiting_line, (g_server->nbr_clients + 1) * sizeof(int), g_server->nbr_clients * sizeof(int)) == -1)
+	{
+		error("memory allocation failed");
+		free(g_server->waiting_line);
+	}
+	g_server->nbr_clients--;
+	g_server->current_client--;
+	usleep(5);
 }

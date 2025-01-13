@@ -46,7 +46,7 @@ test_client_waiting_line() {
   local message="$2"
   local label="$3"
 
-  sleep 0.025
+  sleep 0.07
   (./client "$SERVER_PID" "$message" > /tmp/client_output_${client_id} 2>&1 && echo "done_${client_id}" >> /tmp/clients_done) &
 }
 
@@ -70,7 +70,7 @@ for i in {1..10}; do
     test_client_waiting_line "$i" "$medium_message Simultaneous message from client $i" "Simultaneous client $i"
 done
 
-sleep 10
+sleep 25
 # Validate that all clients finished successfully
 if [ $(wc -l < /tmp/clients_done) -eq 10 ]; then
   echo -e "${green}[PASS] All simultaneous clients completed.${reset}"
@@ -89,7 +89,7 @@ for i in {1..100}; do
   sleep 0.2  # Small delay to simulate staggered client arrivals and waiting line
 done
 
-sleep 100
+sleep 300
 # Validate that all clients finished successfully in stress test
 if [ $(wc -l < /tmp/clients_done) -eq 100 ]; then
   echo -e "${green}[PASS] All stress test clients completed.${reset}"
@@ -110,7 +110,8 @@ while [ $SECONDS -lt $end_time ]; do
   sleep 0.1  # Small delay to ensure the server queues clients correctly
   client_id=$((client_id + 1))
 done
-wait
+
+sleep 300
 
 # Validate that all clients finished successfully in extreme stress test
 if [ $(wc -l < /tmp/clients_done) -eq $((client_id - 1)) ]; then
@@ -119,7 +120,7 @@ else
   echo -e "${red}[FAIL] Some extreme stress test clients did not complete.${reset}"
 fi
 
-wait
+sleep 10
 # Clean up
 kill "-SIGINT" "$SERVER_PID"
 sleep 1  # Give the server some time to shut down

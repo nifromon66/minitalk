@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   receiver.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nifromon <nifromon@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nifromon <nifromon@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/08 14:37:47 by nifromon          #+#    #+#             */
-/*   Updated: 2025/01/13 04:34:20 by nifromon         ###   ########.fr       */
+/*   Updated: 2025/01/13 17:22:39 by nifromon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -131,11 +131,11 @@ void	end_reception(void)
 {
 	g_server->chrono_on = 0;
 	g_server->time = 0;
-	usleep(300);
+	usleep(100);
 	ft_printf("\033[0;35mMessage received from client [\033[0m%d\033[0;35m] :\033[0m\n", g_server->pid);
-	usleep(50);
+	usleep(10);
 	ft_printf("\033[0;32m%s\033[0m\n", g_server->msg);
-	usleep(25);
+	usleep(10);
 	confirm_message_reception();
 	initialize_container();
 }
@@ -150,7 +150,7 @@ void	put_to_wait(int pid)
 	new_index = 0;
 	old_index = g_server->nbr_clients + 1;
 	new_index = old_index + 1;
-	usleep(50);
+	usleep(10);
 	kill(pid, SIGUSR1);
 	ft_printf("\033[0;35mPutting to wait client : \033[0m%d\n", pid);
 	if (!g_server->waiting_line)
@@ -174,7 +174,7 @@ void	put_to_wait(int pid)
 	g_server->nbr_clients++;
 }
 
-int my_realloc(void **ptr, int old_size, int new_size) 
+int my_realloc(void **ptr, int old_size, int new_size)
 {
 	int 	min_size;
 	void	*new_ptr;
@@ -182,7 +182,7 @@ int my_realloc(void **ptr, int old_size, int new_size)
     if (!ptr)
 		return (-1);
 	min_size = 0;
-    if (new_size == 0) 
+    if (new_size == 0)
         return (free(*ptr), *ptr = NULL, 0);
     new_ptr = malloc(new_size);
     if (!new_ptr)

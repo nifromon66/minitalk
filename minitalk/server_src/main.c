@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nifromon <nifromon@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nifromon <nifromon@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/08 14:37:15 by nifromon          #+#    #+#             */
-/*   Updated: 2025/01/13 03:38:33 by nifromon         ###   ########.fr       */
+/*   Updated: 2025/01/13 17:13:33 by nifromon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ int	main(void)
 		{
 			usleep(100);
 			g_server->time++;
-			if (g_server->time >= 1000000)
+			if (g_server->time >= 25000)
 				error("Server timeout");
 		}
 	}

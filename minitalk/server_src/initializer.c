@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   initializer.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nifromon <nifromon@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nifromon <nifromon@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/08 14:56:41 by nifromon          #+#    #+#             */
-/*   Updated: 2025/01/13 04:34:53 by nifromon         ###   ########.fr       */
+/*   Updated: 2025/01/13 17:08:28 by nifromon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,7 +97,8 @@ void	initialize_msg(void)
 
 void	initialize_waiting_signal(void)
 {
-	ft_printf("\033[0;35mStarting to receive next client message...\033[0m\n");
+	usleep(50);
+	ft_printf("\033[0;35mStarting to receive next client message...[ \033[0m%d \033[0;35m]\033[0m\n", g_server->waiting_line[g_server->current_client]);
 	initialize_len();
 	usleep(300);
 	kill(g_server->waiting_line[g_server->current_client], SIGUSR1);
