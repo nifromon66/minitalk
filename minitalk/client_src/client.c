@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   client.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nifromon <nifromon@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nifromon <nifromon@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/08 14:35:16 by nifromon          #+#    #+#             */
-/*   Updated: 2025/01/12 21:10:35 by nifromon         ###   ########.fr       */
+/*   Updated: 2025/01/13 17:50:52 by nifromon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ void	error(char *str)
 	ft_printf("\x1b[31mERROR:\x1b[0m %s\n", str);
 	if (g_client)
 		free(g_client);
-	exit(1);
+	exit(0);
 }
 
 // Function to check if a string is a number
@@ -72,6 +72,8 @@ void	msg_confirmation(int signum, siginfo_t *info, void *context)
 		g_client->bit_confirmed = 1;
 		if (signum == SIGUSR1)
 		{
+			if (g_client)
+				free(g_client);
 			ft_printf("\x1b[32mMessage sent. \x1b[0m");
 			ft_printf("\x1b[32mServer has bit_confirmed by sending a signal.\x1b[0m\n");
 			exit(0);
