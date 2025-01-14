@@ -6,7 +6,7 @@
 #    By: nifromon <nifromon@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/01/08 13:36:58 by nifromon          #+#    #+#              #
-#    Updated: 2025/01/12 20:01:51 by nifromon         ###   ########.fr        #
+#    Updated: 2025/01/14 19:31:29 by nifromon         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -37,14 +37,18 @@ RM =				rm -rf
 # Sources and objects
 SERVER_SRC =		\
 					$(SERVER_DIR)/receiver.c $(SERVER_DIR)/main.c \
-					$(SERVER_DIR)/initializer.c $(SERVER_DIR)/server.c
+					$(SERVER_DIR)/initializer.c \
+					$(SERVER_DIR)/send_confirmation.c \
+					$(SERVER_DIR)/error_manager.c \
+					$(SERVER_DIR)/signal_handlers.c
 
 
 OBJ_SERVER_SRC =	$(SERVER_SRC:$(SERVER_DIR)/%.c=$(OBJ_SERVER_DIR)/%.o)
 
 CLIENT_SRC =		\
-					$(CLIENT_DIR)/client.c $(CLIENT_DIR)/main.c \
-					$(CLIENT_DIR)/transmitter.c $(CLIENT_DIR)/initializer.c
+					$(CLIENT_DIR)/error_manager.c $(CLIENT_DIR)/main.c \
+					$(CLIENT_DIR)/transmitter.c $(CLIENT_DIR)/initializer.c \
+					$(CLIENT_DIR)/signal_handlers.c
 
 OBJ_CLIENT_SRC =	$(CLIENT_SRC:$(CLIENT_DIR)/%.c=$(OBJ_CLIENT_DIR)/%.o)
 
