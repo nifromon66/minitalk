@@ -14,9 +14,12 @@ success_1=1
 success_2=0
 success_3=0
 success_4=0
+success_unicode=0
+success_valgrind=1
+success_diff=1
 
 # Start the server in the background
-./server &
+valgrind --leak-check=full --show-leak-kinds=all --error-exitcode=1 ./server &> valgrind_server_output.log &
 SERVER_PID=$!
 echo -e "${green}Server started with PID ${SERVER_PID}${reset}"
 
@@ -28,16 +31,24 @@ short_message="Hello"
 medium_message="This is a medium-length message for testing."
 long_message="$(head -c 1000 < /dev/urandom | tr -dc 'a-zA-Z0-9')"
 very_long_message="$(head -c 10000 < /dev/urandom | tr -dc 'a-zA-Z0-9')"
+extremely_long_message="$(head -c 100000 < /dev/urandom | tr -dc 'a-zA-Z0-9')"
+unicode_message="你好，世界! Привет, мир! Hello, world! 🌍🌟"
 
 # Function to send a message from a client and check result
 test_message() {
   local message="$1"
   local label="$2"
+  
+  if [ "$label" = "Extremely long message - 100 000" ]; then
+    sleep 2
+  fi
+  valgrind --leak-check=full --show-leak-kinds=all --error-exitcode=1 ./client "$SERVER_PID" "$message" > /tmp/phase1_client_output 2>&1
+  sleep 1
+  if [ "$label" = "Extremely long message - 100 000" ]; then
+    sleep 10
+  fi
 
-  ./client "$SERVER_PID" "$message" > /tmp/phase1_client_output 2>&1
-  sleep 0.75
-
-  # removing colors codes
+  # removing color codes
   clean_output=$(sed 's/\x1b\[[0-9;]*m//g' < /tmp/phase1_client_output)
 
   if echo "$clean_output" | grep -q "^Server confirmed message reception\.\.\." ; then
@@ -60,7 +71,11 @@ test_client_waiting_line() {
   local label="$3"
   local phase="$4"
 
-  sleep 0.1
+  if [ "$phase" = "phase3" ]; then
+    sleep 0.2
+  else
+    sleep 0.1
+  fi
   (
     ./client "$SERVER_PID" "$message" > /tmp/${phase}_client_output_${client_id} 2>&1
     clean_output=$(sed 's/\x1b\[[0-9;]*m//g' < /tmp/${phase}_client_output_${client_id})
@@ -74,18 +89,50 @@ test_client_waiting_line() {
       cat /tmp/${phase}_client_output_${client_id} >> /tmp/${phase}_clients_unknown
     fi
   ) &
+  if [ "$phase" = "phase3" ]; then
+    sleep 0.05
+  else
+    sleep 0.01
+  fi
 }
 
+# Validate server output matches client message
+validate_server_output() {
+  local message="$1"
+  local label="$2"
+
+  ./client "$SERVER_PID" "$message" > /tmp/validate_client_output 2>&1
+  sleep 0.75
+
+  server_log=$(cat valgrind_server_output.log)
+
+  if echo "$server_log" | grep -q "$message"; then
+    echo -e "${green}[PASS] ${label} - Server output matches message${reset}"
+  else
+    echo -e "${red}[FAIL] ${label} - Server output mismatch${reset}"
+    echo "Expected: $message"
+    echo "Server log: $server_log"
+    success_diff=0
+  fi
+}
+
+# Mandatory part
+echo -e "${red}[---------------------------]${yellow}MANDATORY${red}[---------------------------]${reset}"
 # Phase 1: Test single client with various message lengths
 echo -e "${yellow}Phase 1: Single client tests with various message lengths${reset}"
-test_message "$short_message" "Short message"
 sleep 1
-test_message "$medium_message" "Medium message"
+test_message "" "empty message - 0"
+sleep 1
+test_message "$short_message" "Short message - 5"
+sleep 1
+test_message "$medium_message" "Medium message - 45"
 sleep 2
-test_message "$long_message" "Long message"
+test_message "$long_message" "Long message - 1000"
 sleep 3
-test_message "$very_long_message" "Very long message"
-sleep 4
+test_message "$very_long_message" "Very long message - 10 000"
+sleep 5
+test_message "$extremely_long_message" "Extremely long message - 100 000"
+sleep 25
 
 if [ $success_1 -eq 1 ]; then
   echo -e "${green}[PASS] All single clients completed.${reset}"
@@ -93,8 +140,29 @@ else
   echo -e "${red}[FAIL] Some clients did not complete.${reset}"
 fi
 
+sleep 5
+
+echo -e "${yellow}Phase 2: Check that server output match message sent by client${reset}"
+sleep 5
+# Validate server output
+validate_server_output "$short_message" "Short message validation"
+validate_server_output "$medium_message" "Medium message validation"
+validate_server_output "$long_message" "Long message validation"
+validate_server_output "$very_long_message" "Very long message validation"
+
+sleep 5
+
+if [ $success_diff -eq 1 ]; then
+  echo -e "${green}[PASS] Server output match message sent by client.${reset}"
+else
+  echo -e "${red}[FAIL] Some outputs from server does not match message sent by client.${reset}"
+fi
+
+sleep 5
+echo -e "${red}[-----------------------------]${yellow}BONUS${red}[-----------------------------]${reset}"
 # Phase 2: Test multiple clients sending messages simultaneously
-echo -e "${yellow}Phase 2: Testing simultaneous clients${reset}"
+sleep 5
+echo -e "${yellow}Phase 1: Testing simultaneous clients${reset}"
 > /tmp/phase2_clients_done
 > /tmp/phase2_clients_fail
 > /tmp/phase2_clients_unknown
@@ -109,12 +177,12 @@ if [ $(wc -l < /tmp/phase2_clients_done) -eq 10 ]; then
   echo -e "${green}[PASS] All simultaneous clients completed.${reset}"
   success_2=1
 fi
-if [ $(wc -l < /tmp/phase4_clients_fail) -eq 1 ]; then
+if [ $(wc -l < /tmp/phase2_clients_fail) -eq 1 ]; then
   echo -e "${red}[FAIL] Some clients did not complete.${reset}"
   echo -e "Failed clients:"
   cat /tmp/phase2_clients_fail
 fi
-if [ $(wc -l < /tmp/phase4_clients_unknown) -eq 1 ]; then
+if [ $(wc -l < /tmp/phase2_clients_unknown) -eq 1 ]; then
   echo -e "${yellow}[UNKNOWN]${reset}"
   echo -e "clients with unknown errors:"
   cat /tmp/phase2_clients_unknown
@@ -123,8 +191,8 @@ fi
 
 sleep 5
 # Phase 3: Stress test with 100 clients
-echo -e "${yellow}Phase 3: Stress test with 100 clients${reset}"
-sleep 20
+echo -e "${yellow}Phase 2: Stress test with 100 clients${reset}"
+sleep 5
 > /tmp/phase3_clients_done
 > /tmp/phase3_clients_fail
 > /tmp/phase3_clients_unknown
@@ -134,27 +202,28 @@ for i in {1..100}; do
   sleep 0.2  # Small delay to simulate staggered client arrivals and waiting line
 done
 
-sleep 300
+sleep 400
 # Validate that all clients finished successsfully in stress test
 if [ $(wc -l < /tmp/phase3_clients_done) -eq 100 ]; then
   echo -e "${green}[PASS] All stress test clients completed.${reset}"
   success_3=1
 fi
-if [ $(wc -l < /tmp/phase4_clients_fail) -eq 1 ]; then
+if [ $(wc -l < /tmp/phase3_clients_fail) -eq 1 ]; then
   echo -e "${red}[FAIL] Some clients did not complete.${reset}"
   echo -e "Failed clients:"
   cat /tmp/phase3_clients_fail
   success_3=0
 fi
-if [ $(wc -l < /tmp/phase4_clients_unknown) -eq 1 ]; then
+if [ $(wc -l < /tmp/phase3_clients_unknown) -eq 1 ]; then
   echo -e "${yellow}[UNKNOWN]${reset}"
   echo -e "clients with unknown errors:"
   cat /tmp/phase3_clients_unknown
   success_3=0
 fi
 
+sleep 10
 # Phase 4: Extreme stress test
-echo -e "${yellow}Phase 4: Extreme stress test for 10 seconds${reset}"
+echo -e "${yellow}Phase 3: Extreme stress test for 10 seconds${reset}"
 sleep 5
 > /tmp/phase4_clients_done
 > /tmp/phase4_clients_fail
@@ -168,7 +237,7 @@ while [ $SECONDS -lt $end_time ]; do
   client_id=$((client_id + 1))
 done
 
-sleep 50
+sleep 60
 
 # Validate that all clients finished successsfully in extreme stress test
 if [ $(wc -l < /tmp/phase4_clients_done) -eq $((client_id - 1)) ]; then
@@ -188,10 +257,28 @@ if [ $(wc -l < /tmp/phase4_clients_unknown) -eq 1 ]; then
   success_4=0
 fi
 
-if [ $success_1 -eq 1 ] && [ $success_2 -eq 1 ] && [ $success_3 -eq 1 ] && [ $success_4 -eq 1 ]; then
-  echo -e "${green}[SUCCESS] Congratulations. All tests passed successfully. :)${reset}"
+sleep 2
+# Phase 5: Unicode message test
+echo -e "${yellow}Phase 4: Unicode message test${reset}"
+validate_server_output "$unicode_message" "Unicode message validation"
+sleep 1
+./client "$SERVER_PID" "$unicode_message" > /tmp/unicode_client_output 2>&1
+clean_unicode_output=$(sed 's/\x1b\[[0-9;]*m//g' < /tmp/unicode_client_output)
+sleep 1
+
+if [ $success_diff -eq 1 ]; then
+  echo -e "${green}[PASS] Server output match message sent by client.${reset}"
 else
-  echo -e "${red}[FAILED] Too bad. Some test failed. :(${reset}"
+  echo -e "${red}[FAIL] Some outputs from server does not match message sent by client.${reset}"
+fi
+sleep 1
+if echo "$clean_unicode_output" | grep -q "^Server confirmed message reception\.\.\." ; then
+  echo -e "${green}[PASS] Unicode message test${reset}"
+  success_unicode=1
+else
+  echo -e "${red}[FAIL] Unicode message test${reset}"
+  cat /tmp/unicode_client_output
+  success_unicode=0
 fi
 
 # Clean up
@@ -204,6 +291,41 @@ if ps -p "$SERVER_PID" > /dev/null; then
   kill -9 "$SERVER_PID"
 fi
 
-echo -e "${green}Server process terminated.${reset}"
+sleep 5
+echo -e "${red}[---------------------------]${yellow}VALGRIND${red}[---------------------------]${reset}"
+sleep 5
+echo -e "${yellow}Phase 1: Valgrind check for clients${reset}"
+sleep 5
+# Check Valgrind log for leaks on the client
+if grep -q "ERROR SUMMARY: 0 errors from 0 contexts" /tmp/phase1_client_output; then
+  echo -e "${green}[PASS] Valgrind memory check on client passed.${reset}"
+else
+  echo -e "${red}[FAIL] Valgrind memory check on client failed.${reset}"
+  cat /tmp/phase1_client_output
+  success_valgrind=0
+fi
 
+sleep 3
+echo -e "${yellow}Phase 2: Valgrind check for server${reset}"
+sleep 3
+# Check Valgrind log for leaks on the server
+if grep -q "ERROR SUMMARY: 0 errors from 0 contexts" valgrind_server_output.log; then
+  echo -e "${green}[PASS] Valgrind memory check on server passed.${reset}"
+else
+  echo -e "${red}[FAIL] Valgrind memory check on server failed.${reset}"
+  cat valgrind_server_output.log
+  success_valgrind=0
+fi
+
+rm valgrind_server_output.log
+
+sleep 3
+echo -e "${red}[-------------------------]${yellow}FINAL SUMMARY${red}[-------------------------]${reset}"
+sleep 3
+# Final validation
+if [ $success_1 -eq 1 ] && [ $success_2 -eq 1 ] && [ $success_3 -eq 1 ] && [ $success_4 -eq 1 ] && [ $success_unicode -eq 1 ] && [ $success_valgrind -eq 1 ] && [ $success_diff -eq 1 ]; then
+  echo -e "${green}[SUCCESS] Congratulations. All tests passed successfully. :)${reset}"
+else
+  echo -e "${red}[FAILED] Too bad. Some test failed. :(${reset}"
+fi
 

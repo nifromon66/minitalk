@@ -6,7 +6,7 @@
 /*   By: nifromon <nifromon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/08 14:36:21 by nifromon          #+#    #+#             */
-/*   Updated: 2025/01/14 23:19:30 by nifromon         ###   ########.fr       */
+/*   Updated: 2025/01/15 19:17:34 by nifromon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ void	send_message(int server_pid, char *str)
 		{
 			usleep(100);
 			g_client->waiting_timer++;
-			if (g_client->waiting_timer >= 50000)
+			if (g_client->waiting_timer >= 100000)
 				error("Server didn't confirm waiting. Communication failed.");
 		}
 	}
@@ -62,7 +62,7 @@ void	send_char(int server_pid, char c)
 		{
 			usleep(100);
 			g_client->bit_timer++;
-			if (g_client->bit_timer >= 30000)
+			if (g_client->bit_timer >= 50000)
 				error("Server didn't confirm bit. Communication failed.");
 		}
 	}
@@ -74,6 +74,8 @@ void	send_str(int server_pid, char *str)
 	int		i;
 
 	i = 0;
+	if (ft_strlen(str) == 0)
+		return ;
 	while (str[i])
 	{
 		send_char(server_pid, str[i]);
@@ -89,6 +91,11 @@ void	send_len(int server_pid, int len)
 	long	backup;
 	char	*msg_len;
 
+	if (len == 0)
+	{
+		send_str(server_pid, "0000000000");
+		return ;
+	}
 	backup = (long) len;
 	while (backup < 1000000000)
 	{

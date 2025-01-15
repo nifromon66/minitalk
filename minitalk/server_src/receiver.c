@@ -6,7 +6,7 @@
 /*   By: nifromon <nifromon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/08 14:37:47 by nifromon          #+#    #+#             */
-/*   Updated: 2025/01/14 19:06:14 by nifromon         ###   ########.fr       */
+/*   Updated: 2025/01/15 20:45:56 by nifromon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ void	store_msg_len(char c)
 	static int	i = 0;
 
 	g_server->server_timer = 0;
-	g_server->str_len[i] = c;
+	g_server->str_len[i] = ( char)c;
 	i++;
 	if (i == 10)
 	{

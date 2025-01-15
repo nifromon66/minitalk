@@ -6,7 +6,7 @@
 /*   By: nifromon <nifromon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/08 13:18:15 by nifromon          #+#    #+#             */
-/*   Updated: 2025/01/14 19:28:36 by nifromon         ###   ########.fr       */
+/*   Updated: 2025/01/15 20:55:15 by nifromon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,13 +33,13 @@
 // Structures
 typedef struct s_client
 {
-	int	server_pid;
-	int	client_timer;
-	int	bit_timer;
-	int	waiting_timer;
-	int	bit_confirmed;
-	int	continue_waiting;
-	int	stop_waiting;
+	volatile int	server_pid;
+	volatile int	client_timer;
+	volatile int	bit_timer;
+	volatile int	waiting_timer;
+	volatile int	bit_confirmed;
+	volatile int	continue_waiting;
+	volatile int	stop_waiting;
 }		t_client;
 
 // Global variables

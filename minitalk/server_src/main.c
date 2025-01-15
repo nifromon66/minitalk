@@ -6,7 +6,7 @@
 /*   By: nifromon <nifromon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/08 14:37:15 by nifromon          #+#    #+#             */
-/*   Updated: 2025/01/14 18:26:16 by nifromon         ###   ########.fr       */
+/*   Updated: 2025/01/15 20:24:01 by nifromon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@ int	main(void)
 	g_server->str_len = (char *) malloc(sizeof(char) * 11);
 	if (!g_server->str_len)
 		error("memory allocation failed");
+	g_server->msg = NULL;
 	g_server->current_client = 0;
 	g_server->nbr_clients = 0;
 	g_server->waiting_line = NULL;
@@ -36,7 +37,7 @@ int	main(void)
 		{
 			usleep(100);
 			g_server->server_timer++;
-			if (g_server->server_timer >= 50000)
+			if (g_server->server_timer >= 500000)
 				error("Server timeout");
 		}
 	}
