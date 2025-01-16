@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nifromon <nifromon@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nifromon <nifromon@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/08 14:37:15 by nifromon          #+#    #+#             */
-/*   Updated: 2025/01/15 20:24:01 by nifromon         ###   ########.fr       */
+/*   Updated: 2025/01/16 13:37:58 by nifromon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,6 @@ int	main(void)
 	g_server->waiting_line = NULL;
 	ft_printf("%sSERVER PID:%s", PURPLE, RESET);
 	ft_printf("%s[%s%d%s]%s\n", PURPLE, RESET, getpid(), PURPLE, RESET);
-	ft_printf("%sPress CTRL + C to close the server.%s\n", PURPLE, RESET);
 	initialize_container();
 	while (1)
 	{
