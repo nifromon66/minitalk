@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: nifromon <nifromon@student.42.fr>          +#+  +:+       +#+         #
+#    By: nifromon <nifromon@student.42perpignan.    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/01/08 13:36:58 by nifromon          #+#    #+#              #
-#    Updated: 2025/01/15 15:09:08 by nifromon         ###   ########.fr        #
+#    Updated: 2025/01/27 11:27:19 by nifromon         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -78,6 +78,8 @@ $(OBJ_CLIENT_DIR)/%.o: $(CLIENT_DIR)/%.c
 					@mkdir -p $(OBJ_CLIENT_DIR)
 					$(CC) -c $(CFLAGS) $(INCLUDES) $< -o $@
 
+bonus:				all
+
 clean:
 					make -C $(LIBFT_DIR) clean
 					$(RM) $(OBJ_DIR)
@@ -88,4 +90,4 @@ fclean:				clean
 
 re:					fclean all
 
-.PHONY:				all only_server only_client clean fclean re
+.PHONY:				all bonus only_server only_client clean fclean re
