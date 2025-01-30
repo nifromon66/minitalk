@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   transmitter.c                                      :+:      :+:    :+:   */
+/*   transmitter_bonus.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nifromon <nifromon@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nifromon <nifromon@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/08 14:36:21 by nifromon          #+#    #+#             */
-/*   Updated: 2025/01/15 19:17:34 by nifromon         ###   ########.fr       */
+/*   Updated: 2025/01/30 15:22:16 by nifromon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../headers/client.h"
+#include "../headers_bonus/client_bonus.h"
 
 // Function to send a message to the server
 void	send_message(int server_pid, char *str)
@@ -28,7 +28,7 @@ void	send_message(int server_pid, char *str)
 		{
 			usleep(100);
 			g_client->waiting_timer++;
-			if (g_client->waiting_timer >= 100000)
+			if (g_client->waiting_timer >= 10000)
 				error("Server didn't confirm waiting. Communication failed.");
 		}
 	}
@@ -62,7 +62,7 @@ void	send_char(int server_pid, char c)
 		{
 			usleep(100);
 			g_client->bit_timer++;
-			if (g_client->bit_timer >= 50000)
+			if (g_client->bit_timer >= 10000)
 				error("Server didn't confirm bit. Communication failed.");
 		}
 	}

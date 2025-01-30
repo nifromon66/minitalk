@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /**/
 /*:::  ::::::::   */
-/*   print_format_i.c  :+:  :+::+:   */
+/*   print_format_d.c  :+:  :+::+:   */
 /*+:+ +:+ +:+ */
 /*   By: nifromon <nifromon@student.42perpignan.+#+  +:+   +#+*/
 /*+#+#+#+#+#+   +#+   */
-/*   Created: 2024/11/15 19:41:06 by nifromon  #+##+# */
-/*   Updated: 2024/11/15 22:19:29 by nifromon ###   ########.fr   */
+/*   Created: 2024/11/15 18:40:38 by nifromon  #+##+# */
+/*   Updated: 2024/11/15 22:19:08 by nifromon ###   ########.fr   */
 /**/
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ static int	print_n_10_fd(int n)
 	return (i);
 }
 
-void	print_format_i(t_format *format, va_list arg)
+void	ftpf_format_d(t_ft_printf *format, va_list arg)
 {
 	int	i;
 

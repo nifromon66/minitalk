@@ -13,7 +13,7 @@
 //START
 #include "../../headers/libft_H/libft.h"
 
-void	ft_lstadd_back(t_lst_lib **lst, t_lst_lib *new)
+void	ft_lstadd_back(t_libft **lst, t_libft *new)
 {
 	if (!lst || !new)
 		return ;

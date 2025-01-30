@@ -13,9 +13,9 @@
 //START
 #include "../../headers/libft_H/libft.h"
 
-void	ft_lstclear(t_lst_lib **lst, void (*del)(void *))
+void	ft_lstclear(t_libft **lst, void (*del)(void *))
 {
-	t_lst_lib	*tmp_lst;
+	t_libft	*tmp_lst;
 
 	while (*lst != NULL)
 	{

@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   signal_handlers.c                                  :+:      :+:    :+:   */
+/*   signal_handlers_bonus.c                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nifromon <nifromon@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nifromon <nifromon@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/14 16:34:03 by nifromon          #+#    #+#             */
-/*   Updated: 2025/01/14 21:30:40 by nifromon         ###   ########.fr       */
+/*   Updated: 2025/01/30 13:59:51 by nifromon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../headers/client.h"
+#include "../headers_bonus/client_bonus.h"
 
 // Function to confirm that the server has received a bit
 void	handle_bit_confirmation(int signum, siginfo_t *info, void *context)

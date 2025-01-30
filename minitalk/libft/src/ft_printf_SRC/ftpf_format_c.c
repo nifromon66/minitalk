@@ -18,7 +18,7 @@ static int	print_c_fd(char c)
 	return (write(FD, &c, 1));
 }
 
-void	print_format_c(t_format *format, va_list arg)
+void	ftpf_format_c(t_ft_printf *format, va_list arg)
 {
 	int	c;
 

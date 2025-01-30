@@ -13,11 +13,11 @@
 //START
 #include "../../headers/libft_H/libft.h"
 
-t_lst_lib	*ft_lstnew(void *content)
+t_libft	*ft_lstnew(void *content)
 {
-	t_lst_lib	*new_node;
+	t_libft	*new_node;
 
-	new_node = (t_lst_lib *)malloc(sizeof(t_lst_lib));
+	new_node = (t_libft *)malloc(sizeof(t_libft));
 	if (!new_node)
 		return (NULL);
 	new_node->content = content;

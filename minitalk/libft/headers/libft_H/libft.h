@@ -16,9 +16,9 @@
 
 # include <unistd.h>
 # include <stdlib.h>
-# include "../ft_printf_H/ft_printf.h"
-# include "../get_next_line_H/get_next_line.h"
+# include "libft_typedef.h"
 
+// Mandatory fonctions
 int			ft_isalpha(int c);
 int			ft_isdigit(int c);
 int			ft_isalnum(int c);
@@ -54,21 +54,16 @@ void		ft_putstr_fd(char *s, int fd);
 void		ft_putendl_fd(char *s, int fd);
 void		ft_putnbr_fd(int n, int fd);
 
-typedef struct s_lst_lib
-{
-	void				*content;
-	struct s_lst_lib	*next;
-}						t_lst_lib;
-
-t_lst_lib	*ft_lstnew(void *content);
-void		ft_lstadd_front(t_lst_lib **lst, t_lst_lib *new);
-int			ft_lstsize(t_lst_lib *lst);
-t_lst_lib	*ft_lstlast(t_lst_lib *lst);
-void		ft_lstadd_back(t_lst_lib **lst, t_lst_lib *new);
-void		ft_lstdelone(t_lst_lib *lst, void (*del)(void *));
-void		ft_lstclear(t_lst_lib **lst, void (*del)(void *));
-void		ft_lstiter(t_lst_lib *lst, void (*f)(void *));
-t_lst_lib	*ft_lstmap(t_lst_lib *lst, void *(*f)(void *), void (*del)(void *));
+// Bonus Fonctions
+t_libft		*ft_lstnew(void *content);
+void		ft_lstadd_front(t_libft **lst, t_libft *new);
+int			ft_lstsize(t_libft *lst);
+t_libft		*ft_lstlast(t_libft *lst);
+void		ft_lstadd_back(t_libft **lst, t_libft *new);
+void		ft_lstdelone(t_libft *lst, void (*del)(void *));
+void		ft_lstclear(t_libft **lst, void (*del)(void *));
+void		ft_lstiter(t_libft *lst, void (*f)(void *));
+t_libft		*ft_lstmap(t_libft *lst, void *(*f)(void *), void (*del)(void *));
 
 #endif
 

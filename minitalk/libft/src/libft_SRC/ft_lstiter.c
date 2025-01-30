@@ -13,9 +13,9 @@
 //START
 #include "../../headers/libft_H/libft.h"
 
-void	ft_lstiter(t_lst_lib *lst, void (*f)(void *))
+void	ft_lstiter(t_libft *lst, void (*f)(void *))
 {
-	t_lst_lib	*tmp_lst;
+	t_libft	*tmp_lst;
 
 	tmp_lst = lst;
 	while (tmp_lst != NULL)

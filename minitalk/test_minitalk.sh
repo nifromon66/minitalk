@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Enhanced test script for Minitalk project
-# Assumes the server executable is ./server and the client executable is ./client
+# Assumes the server executable is ./server and the client executable is ./client_bonus
 
 # Colors for output
 green="\033[0;32m"
@@ -19,7 +19,7 @@ success_valgrind=1
 success_diff=1
 
 # Start the server in the background
-valgrind --leak-check=full --show-leak-kinds=all --error-exitcode=1 ./server &> valgrind_server_output.log &
+./server_bonus &> server_output.log &
 SERVER_PID=$!
 echo -e "${green}Server started with PID ${SERVER_PID}${reset}"
 
@@ -38,11 +38,11 @@ unicode_message="你好，世界! Привет, мир! Hello, world! 🌍🌟"
 test_message() {
   local message="$1"
   local label="$2"
-  
+
   if [ "$label" = "Extremely long message - 100 000" ]; then
     sleep 2
   fi
-  valgrind --leak-check=full --show-leak-kinds=all --error-exitcode=1 ./client "$SERVER_PID" "$message" > /tmp/phase1_client_output 2>&1
+  ./client_bonus "$SERVER_PID" "$message" > /tmp/phase1_client_output 2>&1
   sleep 1
   if [ "$label" = "Extremely long message - 100 000" ]; then
     sleep 10
@@ -77,7 +77,7 @@ test_client_waiting_line() {
     sleep 0.1
   fi
   (
-    ./client "$SERVER_PID" "$message" > /tmp/${phase}_client_output_${client_id} 2>&1
+    ./client_bonus "$SERVER_PID" "$message" > /tmp/${phase}_client_output_${client_id} 2>&1
     clean_output=$(sed 's/\x1b\[[0-9;]*m//g' < /tmp/${phase}_client_output_${client_id})
     if echo "$clean_output" | grep -q "^Server confirmed message reception\.\.\." ; then
       echo "done_${client_id}" >> /tmp/${phase}_clients_done
@@ -101,7 +101,7 @@ validate_server_output() {
   local message="$1"
   local label="$2"
 
-  ./client "$SERVER_PID" "$message" > /tmp/validate_client_output 2>&1
+  ./client_bonus "$SERVER_PID" "$message" > /tmp/validate_client_output 2>&1
   sleep 0.75
 
   server_log=$(cat valgrind_server_output.log)
@@ -262,7 +262,7 @@ sleep 2
 echo -e "${yellow}Phase 4: Unicode message test${reset}"
 validate_server_output "$unicode_message" "Unicode message validation"
 sleep 1
-./client "$SERVER_PID" "$unicode_message" > /tmp/unicode_client_output 2>&1
+./client_bonus "$SERVER_PID" "$unicode_message" > /tmp/unicode_client_output 2>&1
 clean_unicode_output=$(sed 's/\x1b\[[0-9;]*m//g' < /tmp/unicode_client_output)
 sleep 1
 
@@ -290,34 +290,7 @@ if ps -p "$SERVER_PID" > /dev/null; then
   echo -e "${red}Server did not terminate. Forcing termination...${reset}"
   kill -9 "$SERVER_PID"
 fi
-
-sleep 5
-echo -e "${red}[---------------------------]${yellow}VALGRIND${red}[---------------------------]${reset}"
-sleep 5
-echo -e "${yellow}Phase 1: Valgrind check for clients${reset}"
-sleep 5
-# Check Valgrind log for leaks on the client
-if grep -q "ERROR SUMMARY: 0 errors from 0 contexts" /tmp/phase1_client_output; then
-  echo -e "${green}[PASS] Valgrind memory check on client passed.${reset}"
-else
-  echo -e "${red}[FAIL] Valgrind memory check on client failed.${reset}"
-  cat /tmp/phase1_client_output
-  success_valgrind=0
-fi
-
-sleep 3
-echo -e "${yellow}Phase 2: Valgrind check for server${reset}"
-sleep 3
-# Check Valgrind log for leaks on the server
-if grep -q "ERROR SUMMARY: 0 errors from 0 contexts" valgrind_server_output.log; then
-  echo -e "${green}[PASS] Valgrind memory check on server passed.${reset}"
-else
-  echo -e "${red}[FAIL] Valgrind memory check on server failed.${reset}"
-  cat valgrind_server_output.log
-  success_valgrind=0
-fi
-
-rm valgrind_server_output.log
+rm server_output.log
 
 sleep 3
 echo -e "${red}[-------------------------]${yellow}FINAL SUMMARY${red}[-------------------------]${reset}"

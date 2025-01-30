@@ -25,7 +25,7 @@ static int	print_n_u_fd(unsigned int n)
 	return (i);
 }
 
-void	print_format_u(t_format *format, va_list arg)
+void	ftpf_format_u(t_ft_printf *format, va_list arg)
 {
 	unsigned int	n;
 

@@ -13,9 +13,9 @@
 //START
 #include "../../headers/libft_H/libft.h"
 
-t_lst_lib	*ft_lstlast(t_lst_lib *lst)
+t_libft	*ft_lstlast(t_libft *lst)
 {
-	t_lst_lib	*tmp_lst;
+	t_libft	*tmp_lst;
 
 	if (!lst)
 		return (NULL);

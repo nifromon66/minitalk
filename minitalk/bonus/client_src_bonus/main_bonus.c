@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   main_bonus.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nifromon <nifromon@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nifromon <nifromon@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/08 14:35:47 by nifromon          #+#    #+#             */
-/*   Updated: 2025/01/14 17:27:19 by nifromon         ###   ########.fr       */
+/*   Updated: 2025/01/30 15:22:02 by nifromon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../headers/client.h"
+#include "../headers_bonus/client_bonus.h"
 
 t_client	*g_client;
 

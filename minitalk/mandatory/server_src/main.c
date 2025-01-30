@@ -6,7 +6,7 @@
 /*   By: nifromon <nifromon@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/08 14:37:15 by nifromon          #+#    #+#             */
-/*   Updated: 2025/01/16 13:37:58 by nifromon         ###   ########.fr       */
+/*   Updated: 2025/01/30 15:23:15 by nifromon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ int	main(void)
 		{
 			usleep(100);
 			g_server->server_timer++;
-			if (g_server->server_timer >= 500000)
+			if (g_server->server_timer >= 100000)
 				error("Server timeout");
 		}
 	}

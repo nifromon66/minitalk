@@ -3,17 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line_utils.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nifromon <nifromon@student.42perpignan.    +#+  +:+       +#+        */
+/*   By: nifromon <nifromon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/23 17:40:35 by nifromon          #+#    #+#             */
-/*   Updated: 2025/01/06 17:24:29 by nifromon         ###   ########.fr       */
+/*   Updated: 2025/01/24 06:03:31 by nifromon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 //START
 #include "../../headers/get_next_line_H/get_next_line.h"
 
-int	search_newline(t_list_gnl *store)
+int	gnl_search_newline(t_gnl *store)
 {
 	int	i;
 
@@ -33,7 +33,7 @@ int	search_newline(t_list_gnl *store)
 	return (0);
 }
 
-t_list_gnl	*ft_lstlast_gnl(t_list_gnl *store)
+t_gnl	*gnl_ft_lstlast(t_gnl *store)
 {
 	if (!store)
 		return (NULL);
@@ -42,7 +42,7 @@ t_list_gnl	*ft_lstlast_gnl(t_list_gnl *store)
 	return (store);
 }
 
-void	cpylst_to_str(t_list_gnl *store, char *queue)
+void	gnl_cpylst_to_str(t_gnl *store, char *queue)
 {
 	int	i;
 	int	j;
@@ -68,7 +68,7 @@ void	cpylst_to_str(t_list_gnl *store, char *queue)
 	queue[i] = '\0';
 }
 
-int	lstlen_till_newline(t_list_gnl *store)
+int	gnl_lstlen_till_newline(t_gnl *store)
 {
 	int	i;
 	int	len;
@@ -91,9 +91,9 @@ int	lstlen_till_newline(t_list_gnl *store)
 	return (len);
 }
 
-void	free_store(t_list_gnl	**store, t_list_gnl *clean, char *product)
+void	gnl_free_store(t_gnl	**store, t_gnl *clean, char *product)
 {
-	t_list_gnl	*pop_up;
+	t_gnl	*pop_up;
 
 	if (!*store)
 		return ;

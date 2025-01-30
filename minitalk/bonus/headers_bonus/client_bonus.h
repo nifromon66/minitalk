@@ -1,34 +1,33 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   client.h                                           :+:      :+:    :+:   */
+/*   client_bonus.h                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nifromon <nifromon@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nifromon <nifromon@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/08 13:18:15 by nifromon          #+#    #+#             */
-/*   Updated: 2025/01/15 20:55:15 by nifromon         ###   ########.fr       */
+/*   Updated: 2025/01/30 14:29:00 by nifromon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef CLIENT_H
-# define CLIENT_H
+#ifndef CLIENT_BONUS_H
+# define CLIENT_BONUS_H
 
 // Libraries
-# include <unistd.h>
-# include <stdlib.h>
 # include <signal.h>
-# include "../libft/headers/libft_H/libft.h"
+# include "../../libft/headers/libft_H/libft.h"
+# include "../../libft/headers/ft_printf_H/ft_printf.h"
 
 // Colors
-# define BLACK      "\033[0;30m"
-# define RED        "\033[0;31m"
-# define GREEN      "\033[0;32m"
-# define YELLOW     "\033[0;33m"
-# define BLUE       "\033[0;34m"
-# define PURPLE     "\033[0;35m"
-# define CYAN       "\033[0;36m"
-# define WHITE      "\033[0;37m"
-# define RESET      "\033[0;0m"
+# define BLACK		"\033[0;30m"
+# define RED		"\033[0;31m"
+# define GREEN		"\033[0;32m"
+# define YELLOW		"\033[0;33m"
+# define BLUE		"\033[0;34m"
+# define PURPLE		"\033[0;35m"
+# define CYAN		"\033[0;36m"
+# define WHITE		"\033[0;37m"
+# define RESET		"\033[0;0m"
 
 // Structures
 typedef struct s_client

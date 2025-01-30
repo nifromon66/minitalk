@@ -13,7 +13,7 @@
 //START
 #include "../../headers/ft_printf_H/ft_printf.h"
 
-void	print_format_pc(t_format *percent, va_list arg)
+void	ftpf_format_pc(t_ft_printf *percent, va_list arg)
 {
 	(void) arg;
 	ft_putchar_fd('%', FD);
@@ -36,32 +36,32 @@ static int	ft_percent_len(const char *s)
 	return (0);
 }
 
-static void	dispatching(int type, t_format *format, va_list arg)
+static void	dispatching(int type, t_ft_printf *format, va_list arg)
 {
 	t_dispatch	arr[9];
 
-	arr[C] = &print_format_c;
-	arr[S] = &print_format_s;
-	arr[P] = &print_format_p;
-	arr[D] = &print_format_d;
-	arr[I] = &print_format_i;
-	arr[U] = &print_format_u;
-	arr[X_LOW] = &print_format_x_low;
-	arr[X_UPP] = &print_format_x_upp;
-	arr[PC] = &print_format_pc;
+	arr[FT_PRINTF_C] = &ftpf_format_c;
+	arr[FT_PRINTF_S] = &ftpf_format_s;
+	arr[FT_PRINTF_P] = &ftpf_format_p;
+	arr[FT_PRINTF_D] = &ftpf_format_d;
+	arr[FT_PRINTF_I] = &ftpf_format_i;
+	arr[FT_PRINTF_U] = &ftpf_format_u;
+	arr[FT_PRINTF_X_LOW] = &ftpf_format_x_low;
+	arr[FT_PRINTF_X_UPP] = &ftpf_format_x_upp;
+	arr[FT_PRINTF_PC] = &ftpf_format_pc;
 	arr[type](format, arg);
 }
 
 static int	parsing(const char *format, va_list arg)
 {
-	t_format	*type;
+	t_ft_printf	*type;
 	int			printed;
 	int			specifier;
 
-	type = init_struct();
+	type = ftpf_init_struct();
 	if (format && type)
 	{
-		specifier = fetch_type(format);
+		specifier = ftpf_fetch_type(format);
 		type->specifier = specifier;
 	}
 	dispatching(type->specifier, type, arg);

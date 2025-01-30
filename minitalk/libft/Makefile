@@ -3,28 +3,34 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: nifromon <nifromon@student.42perpignan.    +#+  +:+       +#+         #
+#    By: nifromon <nifromon@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/01/06 05:37:45 by nifromon          #+#    #+#              #
-#    Updated: 2025/01/06 13:03:09 by nifromon         ###   ########.fr        #
+#    Updated: 2025/01/24 05:56:58 by nifromon         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
+# Name
+NAME_ALL =			libft_inc.a
+NAME_LIBFT =		libft.a
+NAME_FT_PRINTF =	ft_printf.a
+NAME_GNL =			get_next_line.a
+
 # Arguments
-NAME =				libft.a
 CC = 				gcc
 CFLAGS = 			-Wall -Wextra -Werror
-INCLUDES =			-I $(LIBFT_H) -I $(FT_PRINTF_H) -I $(GET_NEXT_LINE_H)
 
 # Repositories
+# Sources
 SRCS_DIR =			src
 LIBFT_SRC =			$(SRCS_DIR)/libft_SRC
 FT_PRINTF_SRC = 	$(SRCS_DIR)/ft_printf_SRC
-GET_NEXT_LINE_SRC =	$(SRCS_DIR)/get_next_line_SRC
+GNL_SRC =			$(SRCS_DIR)/get_next_line_SRC
+# Headers
 HEADERS_DIR =		headers
 LIBFT_H =			$(HEADERS_DIR)/libft_H/
 FT_PRINTF_H =		$(HEADERS_DIR)/ft_printf_H/
-GET_NEXT_LINE_H =	$(HEADERS_DIR)/get_next_line_H/
+GNL_H =				$(HEADERS_DIR)/get_next_line_H/
 OBJS_DIR =			obj
 
 # Utils
@@ -32,7 +38,7 @@ AR =				ar -rcs
 RM =				rm -rf
 
 # Sources and Objects
-SRCS = 				\
+LIBFT_SRCS = 		\
 					$(LIBFT_SRC)/ft_isalpha.c $(LIBFT_SRC)/ft_isdigit.c \
 					$(LIBFT_SRC)/ft_isalnum.c $(LIBFT_SRC)/ft_isascii.c \
 					$(LIBFT_SRC)/ft_isprint.c $(LIBFT_SRC)/ft_strlen.c \
@@ -54,41 +60,97 @@ SRCS = 				\
 					$(LIBFT_SRC)/ft_lstsize.c $(LIBFT_SRC)/ft_lstlast.c \
 					$(LIBFT_SRC)/ft_lstadd_back.c $(LIBFT_SRC)/ft_lstdelone.c \
 					$(LIBFT_SRC)/ft_lstclear.c $(LIBFT_SRC)/ft_lstiter.c \
-					$(LIBFT_SRC)/ft_lstmap.c \
-					\
-					$(FT_PRINTF_SRC)/ft_printf.c $(FT_PRINTF_SRC)/init.c \
-					$(FT_PRINTF_SRC)/print_format_c.c $(FT_PRINTF_SRC)/check.c \
-					$(FT_PRINTF_SRC)/print_format_d.c \
-					$(FT_PRINTF_SRC)/print_format_i.c \
-					$(FT_PRINTF_SRC)/print_format_p.c \
-					$(FT_PRINTF_SRC)/print_format_s.c \
-					$(FT_PRINTF_SRC)/print_format_u.c \
-					$(FT_PRINTF_SRC)/print_format_x_low.c \
-					$(FT_PRINTF_SRC)/print_format_x_upp.c \
-					\
-					$(GET_NEXT_LINE_SRC)/get_next_line.c \
-					$(GET_NEXT_LINE_SRC)/get_next_line_utils.c
+					$(LIBFT_SRC)/ft_lstmap.c
 
-OBJS = 				$(SRCS:$(SRCS_DIR)/%.c=$(OBJS_DIR)/$(SRCS_DIR)/%.o)
+LIBFT_OBJS = 		$(LIBFT_SRCS:$(LIBFT_SRC)/%.c=$(OBJS_DIR)/$(LIBFT_SRC)/%.o)
+					
+FT_PRINTF_SRCS =	\
+					$(FT_PRINTF_SRC)/ft_printf.c $(FT_PRINTF_SRC)/ftpf_init.c \
+					$(FT_PRINTF_SRC)/ftpf_format_c.c $(FT_PRINTF_SRC)/ftpf_check.c \
+					$(FT_PRINTF_SRC)/ftpf_format_d.c \
+					$(FT_PRINTF_SRC)/ftpf_format_i.c \
+					$(FT_PRINTF_SRC)/ftpf_format_p.c \
+					$(FT_PRINTF_SRC)/ftpf_format_s.c \
+					$(FT_PRINTF_SRC)/ftpf_format_u.c \
+					$(FT_PRINTF_SRC)/ftpf_format_x_low.c \
+					$(FT_PRINTF_SRC)/ftpf_format_x_upp.c
+
+FT_PRINTF_OBJS = 	$(FT_PRINTF_SRCS:$(FT_PRINTF_SRC)/%.c=$(OBJS_DIR)/$(FT_PRINTF_SRC)/%.o)
+					
+GNL_SRCS =			\
+					$(GNL_SRC)/get_next_line.c \
+					$(GNL_SRC)/get_next_line_utils.c
+
+GNL_OBJS = 			$(GNL_SRCS:$(GNL_SRC)/%.c=$(OBJS_DIR)/$(GNL_SRC)/%.o)
 
 # Rules and Dependencies
-all: 				$(NAME)
+all: 				$(NAME_ALL)
 
-$(NAME):			$(OBJS)
-					$(AR) $(NAME) $(OBJS)
+$(NAME_ALL):		$(LIBFT_OBJS) $(FT_PRINTF_OBJS) $(GNL_OBJS)
+					$(AR) $(NAME_ALL) $(LIBFT_OBJS) $(FT_PRINTF_OBJS) $(GNL_OBJS)
 
-$(OBJS_DIR)/$(SRCS_DIR)/%.o: $(SRCS_DIR)/%.c
+libft:				$(NAME_LIBFT)
+
+$(NAME_LIBFT):		$(LIBFT_OBJS)
+					$(AR) $(NAME_LIBFT) $(LIBFT_OBJS)
+
+$(OBJS_DIR)/$(LIBFT_SRC)/%.o: $(LIBFT_SRC)/%.c
 					@mkdir -p $(dir $@)
-					$(CC) -c $(CFLAGS) $(INCLUDES) $< -o $@
+					$(CC) -c $(CFLAGS) -I $(LIBFT_H) $< -o $@
 
-clean:
+clean_libft:
+					$(RM) $(OBJS_DIR)/$(LIBFT_SRC)
+					
+fclean_libft: 		clean_libft
+					$(RM) $(NAME_LIBFT)
+
+re_libft: 				fclean_libft libft
+
+ft_printf:			$(NAME_FT_PRINTF) libft
+
+$(NAME_FT_PRINTF):	$(FT_PRINTF_OBJS)
+					$(AR) $(NAME_FT_PRINTF) $(FT_PRINTF_OBJS)
+
+$(OBJS_DIR)/$(FT_PRINTF_SRC)/%.o: $(FT_PRINTF_SRC)/%.c
+					@mkdir -p $(dir $@)
+					$(CC) -c $(CFLAGS) -I $(FT_PRINTF_H) $< -o $@
+
+clean_ft_printf:
+					$(RM) $(OBJS_DIR)/$(FT_PRINTF_SRC)
+					
+fclean_ft_printf: 	clean_ft_printf
+					$(RM) $(NAME_FT_PRINTF)
+
+re_ft_printf: 		fclean_ft_printf ft_printf
+
+get_next_line:		$(NAME_GNL)
+
+$(NAME_GNL):		$(GNL_OBJS)
+					$(AR) $(NAME_GNL) $(GNL_OBJS)
+
+$(OBJS_DIR)/$(GNL_SRC)/%.o: $(GNL_SRC)/%.c
+					@mkdir -p $(dir $@)
+					$(CC) -c $(CFLAGS) -I $(GNL_H) $< -o $@
+
+clean_gnl:
+					$(RM) $(OBJS_DIR)/$(GNL_SRC)
+					
+fclean_gnl: 		clean_gnl
+					$(RM) $(NAME_GNL)
+
+re_gnl: 			fclean_gnl get_next_line
+
+clean:				clean_libft clean_ft_printf clean_gnl
 					$(RM) $(OBJS_DIR)
 
-fclean: 			clean
-					$(RM) $(NAME)
+fclean: 			clean fclean_libft fclean_ft_printf fclean_gnl
+					$(RM) $(NAME_ALL)
 
 re: 				fclean all
 
-.PHONY: 			all clean fclean re
+.PHONY: 			all libft ft_printf get_next_line clean fclean re \
+					clean_libft clean_ft_printf clean \
+					fclean_libft fclean_ft_printf fclean_gnl \
+					re_libft re_ft_printf re_gnl
 
 #END

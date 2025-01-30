@@ -13,10 +13,10 @@
 //START
 #include "../../headers/libft_H/libft.h"
 
-int	ft_lstsize(t_lst_lib *lst)
+int	ft_lstsize(t_libft *lst)
 {
-	int			i;
-	t_lst_lib	*tmp_lst;
+	int		i;
+	t_libft	*tmp_lst;
 
 	i = 0;
 	tmp_lst = lst;
