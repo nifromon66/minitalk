@@ -73,7 +73,7 @@ or, for bonus features:
 - On startup, the server displays its **PID**:
 
 ```
-SERVER PID: [^2392089]    # Example output
+SERVER PID: [2392089]    # Example output
 ```
 
 
@@ -130,7 +130,7 @@ Server confirmed message reception...
 Client                   Server
   | -------------bit-by-bit---> |
   |                             |
-  |        <---ACK (bonus)------|
+  | <--Acknowledgement(bonus)-- |
 ```
 
 
@@ -193,15 +193,5 @@ Closing Server...
 
 ## Credits
 
-**Author(s):** [Your Name(s)], as part of 42 School curriculum.
-
-*This README.md is structured for personal maintenance, collaborative sharing, and as a reference for technical interviews. It is modeled to the 42 Norm and reflects detailed understanding of UNIX signaling, C programming, and asynchronous IPC development.*
-
-<div style="text-align: center">⁂</div>
-
-[^1]: server_output.log
-
-[^2]: test_minitalk.sh
-
-[^3]: Minitalk_en_subject.pdf
+**Author(s):** [Nicolas Fromont, alias nifromon], as part of 42 School curriculum.
 
